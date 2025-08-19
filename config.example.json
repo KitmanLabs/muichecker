@@ -1,0 +1,5 @@
+{
+  "frontendRepoPath": "/path/to/your/kitman-frontend/repository",
+  "sprintLengthDays": 14,
+  "daysSinceSprintEnd": 6
+}
