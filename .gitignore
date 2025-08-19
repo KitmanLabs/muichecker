@@ -1,0 +1,16 @@
+# Generated files
+sprint-report.json
+mui-sprint-dashboard.html
+
+# Configuration (contains local paths)
+config.json
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Node modules (if any)
+node_modules/
+
+# Logs
+*.log
