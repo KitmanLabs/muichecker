@@ -57,9 +57,9 @@ function generateDashboard() {
         const reportData = ${JSON.stringify(dashboardData, null, 2)};
         `;
         
-        // Find and replace the sample data section
-        const sampleDataRegex = /\/\/ Sample data.*?};/s;
-        template = template.replace(sampleDataRegex, dataScript);
+        // Find and replace the report data section
+        const reportDataRegex = /\/\/ Report data - generated.*?};/s;
+        template = template.replace(reportDataRegex, dataScript);
         
         // Write the updated dashboard
         fs.writeFileSync(DASHBOARD_PATH, template);

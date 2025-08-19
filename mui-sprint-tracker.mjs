@@ -88,7 +88,13 @@ function isUIFile(filename) {
 }
 
 function isInTargetDirectory(filepath) {
-  return TARGET_DIRECTORIES.some(dir => filepath.includes(dir));
+  // Git returns relative paths, so we need to check against relative target directories
+  const relativeTargetDirs = [
+    'packages/modules/src',
+    'packages/components/src',
+    'packages/playbook/src'
+  ];
+  return relativeTargetDirs.some(dir => filepath.startsWith(dir));
 }
 
 function analyzeImports(fileContent) {
@@ -96,6 +102,7 @@ function analyzeImports(fileContent) {
   const lines = fileContent.split('\n');
   
   for (const line of lines) {
+    // Match both "import ... from 'package'" and "import { ... } from 'package'"
     const importMatch = line.match(/import.*from\s+['"`]([^'"`]+)['"`]/);
     if (importMatch) {
       imports.push(importMatch[1]);
@@ -131,12 +138,15 @@ function getLegacyLibraries(imports) {
   );
 }
 
-function getGitHistory(since = '2 weeks ago') {
+function getGitHistory(since = '2 weeks ago', until = null) {
   try {
-    const output = execSync(
-      `git log --name-only --since="${since}" --pretty=format:"%H|%an|%s"`,
-      { cwd: PROJECT_ROOT, encoding: 'utf8' }
-    );
+    let command = `git log --name-only --since="${since}"`;
+    if (until) {
+      command += ` --until="${until}"`;
+    }
+    command += ` --pretty=format:"%H|%an|%s"`;
+    
+    const output = execSync(command, { cwd: PROJECT_ROOT, encoding: 'utf8' });
     return output.trim().split('\n').filter(line => line.trim());
   } catch (error) {
     console.error('Error getting git history:', error.message);
@@ -146,7 +156,9 @@ function getGitHistory(since = '2 weeks ago') {
 
 function getFileContent(filepath) {
   try {
-    return fs.readFileSync(filepath, 'utf8');
+    // Git returns relative paths, so we need to prepend the project root
+    const fullPath = path.join(PROJECT_ROOT, filepath);
+    return fs.readFileSync(fullPath, 'utf8');
   } catch (error) {
     return '';
   }
@@ -170,12 +182,11 @@ function analyzeSprint() {
   console.log('📅 Sprint Schedule Analysis:');
   console.log(`Last Sprint: ${sprintStartStr} to ${sprintEndStr}`);
   
-  const since = `${sprintStartStr}..${sprintEndStr}`;
   console.log(`🔍 Analyzing last completed sprint (${sprintStartStr} to ${sprintEndStr})...`);
-  console.log(`Analyzing MUI adoption since: ${since}`);
+  console.log(`Analyzing MUI adoption from ${sprintStartStr} to ${sprintEndStr}`);
   
   // Get git history
-  const gitHistory = getGitHistory(since);
+  const gitHistory = getGitHistory(sprintStartStr, sprintEndStr);
   
   // Process commits
   const modifiedFiles = new Set();
@@ -194,7 +205,16 @@ function analyzeSprint() {
       currentMessage = message;
     } else if (line.trim() && currentCommit) {
       const filepath = line.trim();
-      if (isUIFile(filepath) && isInTargetDirectory(filepath)) {
+      const isUI = isUIFile(filepath);
+      const isTarget = isInTargetDirectory(filepath);
+      
+      // Debug: Show specific file we're looking for
+      if (filepath.includes('MatchDayHeaderButtons')) {
+        console.log(`🔍 Found target file: ${filepath}`);
+        console.log(`   isUIFile: ${isUI}, isInTargetDirectory: ${isTarget}`);
+      }
+      
+      if (isUI && isTarget) {
         modifiedFiles.add(filepath);
         fileAuthors.set(filepath, currentAuthor);
         commitMessages.set(filepath, currentMessage);
@@ -208,12 +228,20 @@ function analyzeSprint() {
   const bestPerformers = new Map();
   const legacyBreakdown = new Map();
   
+  console.log(`\n🔍 Analyzing ${modifiedFiles.size} files...`);
+  
   for (const filepath of modifiedFiles) {
     const content = getFileContent(filepath);
     const imports = analyzeImports(content);
     const category = categorizeComponent(imports);
     const author = fileAuthors.get(filepath);
     const component = path.basename(filepath);
+    
+    // Debug: Show files with MUI imports
+    if (imports.some(imp => ['@mui/material', '@kitman/playbook/components', '@kitman/components'].some(pkg => imp.includes(pkg)))) {
+      console.log(`✅ Found MUI file: ${filepath} (${category})`);
+      console.log(`   Imports: ${imports.join(', ')}`);
+    }
     
     components.push({
       filepath,
@@ -287,7 +315,7 @@ function analyzeSprint() {
   const report = {
     sprint: `Sprint-${sprintStartStr.replace(/-/g, '')}-${sprintEndStr.replace(/-/g, '')}`,
     date: new Date().toISOString().split('T')[0],
-    since,
+    since: `${sprintStartStr} to ${sprintEndStr}`,
     summary,
     offenders,
     legacyBreakdown: Object.fromEntries(legacyBreakdown),
