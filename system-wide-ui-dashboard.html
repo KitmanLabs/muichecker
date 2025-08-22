@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System-Wide UI Analysis Dashboard</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 30px;
+        }
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #1976d2;
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 1em;
+            font-weight: 500;
+        }
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .chart-container {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+        }
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+        .breakdown-name {
+            font-weight: 500;
+            color: #333;
+        }
+        .breakdown-count {
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1976d2, #42a5f5);
+            transition: width 0.3s ease;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>System-Wide UI Analysis</h1>
+            <p>Complete codebase UI composition breakdown</p>
+            <p>Analysis Date: 2025-08-22</p>
+        </div>
+        
+        <div class="content">
+            <!-- Top Stats Section -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-number">4587</div>
+                    <div class="stat-label">Total UI Files</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">564</div>
+                    <div class="stat-label">MUI Components</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">461</div>
+                    <div class="stat-label">Legacy Components</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">54%</div>
+                    <div class="stat-label">MUI Adoption Rate</div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-title">Legacy Library Usage</div>
+                    
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@emotion/react</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 10%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">467</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">react-select</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">9</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">bootstrap-select</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">6</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">react-modal</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">3</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">react-select/async</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">2</div>
+                        </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">MUI Package Usage</div>
+                    
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 8%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">374</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/icons</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 3%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">158</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/x-data-grid-pro</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 1%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">46</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/hooks</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 1%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">43</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/wrappers/MovementAwareDatePicker</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 1%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">27</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/types</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">21</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/material/styles</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">15</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/mixins/drawerMixins</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">14</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/material</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">12</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/themes</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">10</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/layouts/Drawer</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">10</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/utils/Autocomplete</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">10</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/wrappers/CustomDateRangePicker</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">9</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/material/useMediaQuery</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">7</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/icons-material</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">6</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/wrappers/CustomDateRangePicker/utils</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">6</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/utils/DatePicker</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">5</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/icons/consts</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">4</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/index</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">3</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/icons-material/Close</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">2</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/x-date-pickers-pro/SingleInputDateRangeField</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">2</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/ConfirmationModal</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">2</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/icons/kitmanIconData</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">2</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/wrappers/DataGrid/types</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/icons-material/AttachFile</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/icons-material/DeleteOutlineOutlined</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/icons-material/MoreVert</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/icons-material/ExpandLess</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/icons-material/ExpandMore</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/icons-material/LockClock</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/wrappers/SelectWrapper</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/OpenIssues/index</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/providers/wrappers/LocalizationProvider</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/wrappers/DateRangePickerWrapper</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/TabBar/types</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/material/FormControlLabel</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/material/Switch</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/material/Typography</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/icons-material/Undo</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/icons-material/Redo</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/material/Tooltip</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/FilesDock</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/utils</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/material/useScrollTrigger</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@mui/icons-material/KeyboardArrowUp</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">@kitman/playbook/components/Toasts</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">1</div>
+                        </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">Module Distribution</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">modules</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 93%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">4271</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>
+                                <div class="breakdown-name">components</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 7%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-count">316</div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Generated by System-Wide UI Analysis Tool</p>
+        </div>
+    </div>
+</body>
+</html>

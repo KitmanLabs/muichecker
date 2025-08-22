@@ -26,6 +26,12 @@ node mui-sprint-dashboard-generator.mjs
 
 # View dashboard
 open mui-sprint-dashboard.html
+
+# NEW! Analyze entire codebase UI composition
+node system-wide-ui-analyzer.mjs
+
+# View system-wide dashboard
+open system-wide-ui-dashboard.html
 ```
 
 ## Files
@@ -34,9 +40,12 @@ open mui-sprint-dashboard.html
 - `config.json` - Configuration file (created by setup script)
 - `mui-sprint-tracker.mjs` - Analyzes git history and generates sprint report
 - `mui-sprint-dashboard-generator.mjs` - Creates dashboard from report data
+- `system-wide-ui-analyzer.mjs` - **NEW!** Analyzes entire codebase UI composition
 - `automation-setup.mjs` - Provides cron job setup instructions
 - `sprint-report.json` - Generated sprint data (created by tracker)
 - `mui-sprint-dashboard.html` - Generated dashboard (created by generator)
+- `system-wide-ui-report.json` - Complete codebase analysis (created by analyzer)
+- `system-wide-ui-dashboard.html` - System-wide dashboard (created by analyzer)
 
 ## Automation
 
@@ -50,9 +59,18 @@ Follow the instructions to add a cron job.
 
 ## What It Tracks
 
+### Sprint Analysis (mui-sprint-tracker.mjs)
 - **Total Offences:** Engineers who modified legacy components without updating to MUI
 - **Total Conversions:** Engineers who contributed to MUI migration
-- **Product MUI %:** Overall MUI adoption rate across the codebase
+- **Product MUI %:** MUI adoption rate of components modified during the sprint
+
+### System-Wide Analysis (system-wide-ui-analyzer.mjs) - NEW!
+- **Total UI Files:** Complete count of all UI components in the codebase
+- **MUI Components:** Number of components using MUI libraries
+- **Legacy Components:** Number of components using Bootstrap, Semantic UI, etc.
+- **Overall MUI Adoption Rate:** True percentage across entire deployed system
+- **Library Breakdown:** Detailed breakdown of which legacy libraries are still in use
+- **Module Distribution:** UI composition across different modules/packages
 
 ## Dashboard Tabs
 
